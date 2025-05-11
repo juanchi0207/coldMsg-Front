@@ -62,76 +62,97 @@ const IcebreakerForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {error && <p className="text-red-500">{error}</p>}
 
-      <label className="block mb-2 font-medium">Perfil emisor</label>
-      <input
-        type="url"
-        name="senderProfile"
-        value={values.senderProfile}
-        onChange={handleChange}
-        placeholder="https://www.linkedin.com/in/tu-perfil"
-        required
-        className="w-full mb-4 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/** Perfil emisor */}
+        <div>
+          <label className="block mb-1 font-medium">Tu perfil</label>
+          <input
+            name="senderProfile" type="url" required
+            value={values.senderProfile} onChange={handleChange}
+            placeholder="https://linkedin.com/in/..."
+            className="w-full border rounded-lg px-3 py-2
+                       focus:outline-none focus:ring-2 focus:ring-primary-light
+                       transition"
+          />
+        </div>
 
-      <label className="block mb-2 font-medium">Perfil destinatario</label>
-      <input
-        type="url"
-        name="recipientProfile"
-        value={values.recipientProfile}
-        onChange={handleChange}
-        placeholder="https://www.linkedin.com/in/destinatario"
-        required
-        className="w-full mb-4 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-      />
+        {/** Perfil destinatario */}
+        <div>
+          <label className="block mb-1 font-medium">Perfil destinatario</label>
+          <input
+            name="recipientProfile" type="url" required
+            value={values.recipientProfile} onChange={handleChange}
+            placeholder="https://linkedin.com/in/..."
+            className="w-full border rounded-lg px-3 py-2
+                       focus:outline-none focus:ring-2 focus:ring-primary-light
+                       transition"
+          />
+        </div>
+      </div>
 
-      <label className="block mb-2 font-medium">Idioma</label>
-      <select
-        name="language"
-        value={values.language}
-        onChange={handleChange}
-        required
-        className="w-full mb-4 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-      >
-        <option value="">Seleccione un idioma...</option>
-        <option>Español (ARG)</option>
-        <option>Inglés</option>
-        <option>Portugués</option>
-        <option>Francés</option>
-      </select>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/** Idioma */}
+        <div>
+          <label className="block mb-1 font-medium">Idioma</label>
+          <select
+            name="language" required
+            value={values.language} onChange={handleChange}
+            className="w-full border rounded-lg px-3 py-2
+                       focus:outline-none focus:ring-2 focus:ring-primary-light
+                       transition"
+          >
+            <option value="">Seleccione...</option>
+            <option>Español (ARG)</option>
+            <option>Inglés</option>
+            <option>Portugués</option>
+            <option>Francés</option>
+          </select>
+        </div>
 
-      <label className="block mb-2 font-medium">Problema que resolvés</label>
-      <textarea
-        name="problem"
-        value={values.problem}
-        onChange={handleChange}
-        placeholder="Describe el problema que ayudas a resolver"
-        required
-        className="w-full mb-4 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500 h-24"
-      />
+        {/** Generar botón */}
+        <div className="flex items-end">
+          <button
+            type="submit" disabled={isLoading}
+            className="w-full bg-primary text-white font-semibold py-2 rounded-lg
+                       hover:bg-primary-light transition disabled:opacity-50"
+          >
+            {isLoading ? <Spinner /> : 'Generar mensajes'}
+          </button>
+        </div>
+      </div>
 
-      <label className="block mb-2 font-medium">Solución que ofrecés</label>
-      <textarea
-        name="solution"
-        value={values.solution}
-        onChange={handleChange}
-        placeholder="Describe la solución que ofreces"
-        required
-        className="w-full mb-4 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500 h-24"
-      />
+      {/** Campos de texto */}
+      <div className="grid gap-4">
+        <div>
+          <label className="block mb-1 font-medium">Problema</label>
+          <textarea
+            name="problem" required
+            value={values.problem} onChange={handleChange}
+            rows={3}
+            className="w-full border rounded-lg px-3 py-2
+                       focus:outline-none focus:ring-2 focus:ring-primary-light
+                       transition"
+          />
+        </div>
 
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-      >
-        {isLoading ? <Spinner /> : 'Generar mensajes'}
-      </button>
+        <div>
+          <label className="block mb-1 font-medium">Solución</label>
+          <textarea
+            name="solution" required
+            value={values.solution} onChange={handleChange}
+            rows={3}
+            className="w-full border rounded-lg px-3 py-2
+                       focus:outline-none focus:ring-2 focus:ring-primary-light
+                       transition"
+          />
+        </div>
+      </div>
 
       {messages.length > 0 && (
-        <div className="mt-6">
+        <div className="mt-8">
           <IcebreakerResults messages={messages} />
         </div>
       )}
