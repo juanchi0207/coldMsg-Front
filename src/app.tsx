@@ -8,7 +8,7 @@ function App() {
         <h1 className="text-3xl font-extrabold">Cold Message Generator</h1>
       </header>
       <main className="flex-grow flex items-center justify-center p-4">
-        <div className="w-full max-w-2xl bg-white p-8 rounded-xl shadow-lg">
+        <div className="w-full max-w-4xl bg-white p-8 rounded-xl shadow-lg">
           <IcebreakerForm />
         </div>
       </main>
