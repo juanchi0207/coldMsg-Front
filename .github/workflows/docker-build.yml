@@ -32,7 +32,7 @@ jobs:
           push: true
           # etiqueta con rama (main o dev)
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+            ghcr.io/coldmsg-front:${{ github.ref_name }}
           # pasa la URL de API desde los secrets
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
