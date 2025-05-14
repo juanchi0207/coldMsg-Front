@@ -1,176 +1,171 @@
-// src/components/IcebreakerForm.tsx
-import React, { useState } from 'react'
-import Spinner from './Spinner'
-import IcebreakerResults from './IceBreakerResults'
-import { generateIcebreakers } from '../api/generateIceBreakers'
+import React from 'react';
+import Spinner from './Spinner';
+import IcebreakerResults from './IceBreakerResults';
 
-interface FormValues {
-  senderProfile: string
-  recipientProfile: string
-  language: string
-  problem: string
-  solution: string
-}
-
-const IcebreakerForm: React.FC = () => {
-  const [values, setValues] = useState<FormValues>({
-    senderProfile: '',
-    recipientProfile: '',
-    language: '',
-    problem: '',
-    solution: '',
-  })
-  const [isLoading, setIsLoading] = useState(false)
-  const [messages, setMessages] = useState<string[]>([])
-  const [error, setError] = useState<string>('')
-
-  const handleChange = (
+interface IceBreakerFormProps {
+  values: {
+    senderProfile: string;
+    recipientProfile: string;
+    language: string;
+    problem: string;
+    solution: string;
+  };
+  error: string | null;
+  isLoading: boolean;
+  messages: string[];
+  handleChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
-  ) => {
-    const { name, value } = e.target
-    setValues((prev) => ({ ...prev, [name]: value }))
-  }
+  ) => void;
+  handleSubmit: (e: React.FormEvent) => void;
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setMessages([])
-
-    const { senderProfile, recipientProfile, language, problem, solution } =
-      values
-
-    if (
-      !senderProfile ||
-      !recipientProfile ||
-      !language ||
-      !problem ||
-      !solution
-    ) {
-      setError('Por favor completa todos los campos.')
-      return
-    }
-    if (
-      !senderProfile.includes('linkedin.com') ||
-      !recipientProfile.includes('linkedin.com')
-    ) {
-      setError('Asegúrate de que las URLs sean de LinkedIn.')
-      return
-    }
-
-    setIsLoading(true)
-    try {
-      const msgs = await generateIcebreakers(values)
-      setMessages(msgs)
-    } catch (err: any) {
-      setError(err.message || 'Error al generar mensajes.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
+export default function IceBreakerForm({
+  values,
+  error,
+  isLoading,
+  messages,
+  handleChange,
+  handleSubmit,
+}: IceBreakerFormProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      {/* Columna IZQUIERDA: Formulario */}
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {error && <p className="text-red-500">{error}</p>}
+      {/* Formulario */}
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg transition-colors"
+      >
+        {error && (
+          <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+            {error}
+          </p>
+        )}
 
         <div>
-          <label className="block mb-1 font-medium">Tu perfil LinkedIn</label>
+          <label
+            htmlFor="senderProfile"
+            className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Tu perfil LinkedIn
+          </label>
           <input
+            id="senderProfile"
             type="url"
             name="senderProfile"
             value={values.senderProfile}
             onChange={handleChange}
             placeholder="https://www.linkedin.com/in/tu-perfil"
             required
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light transition"
+            className="w-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
           />
         </div>
 
         <div>
-          <label className="block mb-1 font-medium">
+          <label
+            htmlFor="recipientProfile"
+            className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
             Perfil LinkedIn destinatario
           </label>
           <input
+            id="recipientProfile"
             type="url"
             name="recipientProfile"
             value={values.recipientProfile}
             onChange={handleChange}
             placeholder="https://www.linkedin.com/in/destinatario"
             required
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light transition"
+            className="w-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
           />
         </div>
 
         <div>
-          <label className="block mb-1 font-medium">Idioma</label>
+          <label
+            htmlFor="language"
+            className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Idioma
+          </label>
           <select
+            id="language"
             name="language"
             value={values.language}
             onChange={handleChange}
             required
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light transition"
+            className="w-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
           >
-            <option value="">Seleccione un idioma...</option>
+            <option value="" className="text-gray-500 dark:text-gray-400">
+              Seleccione un idioma...
+            </option>
             <option>Español (ARG)</option>
-            <option>Inglés</option>
+            <option>Español (ESP)</option>
+            <option>Inglés (UK)</option>
             <option>Portugués</option>
             <option>Francés</option>
           </select>
         </div>
 
         <div>
-          <label className="block mb-1 font-medium">Problema que resolvés</label>
+          <label
+            htmlFor="problem"
+            className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Problema que encontraste
+          </label>
           <textarea
+            id="problem"
             name="problem"
             value={values.problem}
             onChange={handleChange}
-            placeholder="Describe el problema que ayudas a resolver"
+            placeholder="Describe el problema que encontraste"
             required
             rows={3}
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light transition"
+            className="w-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors resize-none"
           />
         </div>
 
         <div>
-          <label className="block mb-1 font-medium">Solución que ofrecés</label>
+          <label
+            htmlFor="solution"
+            className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Solución que ofrecés
+          </label>
           <textarea
+            id="solution"
             name="solution"
             value={values.solution}
             onChange={handleChange}
             placeholder="Describe la solución que ofreces"
             required
             rows={3}
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light transition"
+            className="w-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors resize-none"
           />
         </div>
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-primary text-white font-semibold py-2 rounded-lg hover:bg-primary-light transition disabled:opacity-50"
+          className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:bg-primary-light dark:hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? <Spinner /> : 'Generar mensajes'}
         </button>
       </form>
 
-      {/* Columna DERECHA: Placeholder / Carga / Resultados */}
-      <div className="min-h-[300px] flex items-center justify-center border border-dashed border-gray-300 rounded-lg p-4">
+      {/* Resultados / Placeholder */}
+      <div className="min-h-[300px] flex items-center justify-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 transition-colors">
         {isLoading ? (
           <div className="text-center">
             <Spinner />
-            <p className="mt-2 text-gray-500">Generando mensajes...</p>
+            <p className="mt-2 text-gray-500 dark:text-gray-400">Generando mensajes...</p>
           </div>
         ) : messages.length > 0 ? (
           <IcebreakerResults messages={messages} />
         ) : (
-          <p className="text-gray-400">Aquí aparecerán tus mensajes</p>
+          <p className="text-gray-400 dark:text-gray-500">Aquí aparecerán tus mensajes</p>
         )}
       </div>
     </div>
-  )
+  );
 }
-
-export default IcebreakerForm
