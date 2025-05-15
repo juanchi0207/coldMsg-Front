@@ -42,6 +42,7 @@ export default function IceBreakerForm({
           </p>
         )}
 
+        {/* LinkedIn Sender */}
         <div>
           <label
             htmlFor="senderProfile"
@@ -55,12 +56,15 @@ export default function IceBreakerForm({
             name="senderProfile"
             value={values.senderProfile}
             onChange={handleChange}
-            placeholder="https://www.linkedin.com/in/tu-perfil"
+            placeholder="https://www.linkedin.com/in/tu-perfil/"
             required
+            pattern="https://(www\\.)?linkedin\\.com/in/[A-Za-z0-9_-]+/?"
+            title="Ingresa una URL de perfil de LinkedIn válida, p.ej. https://www.linkedin.com/in/usuario/"
             className="w-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
           />
         </div>
 
+        {/* LinkedIn Recipient */}
         <div>
           <label
             htmlFor="recipientProfile"
@@ -74,12 +78,15 @@ export default function IceBreakerForm({
             name="recipientProfile"
             value={values.recipientProfile}
             onChange={handleChange}
-            placeholder="https://www.linkedin.com/in/destinatario"
+            placeholder="https://www.linkedin.com/in/destinatario/"
             required
+            pattern="https://(www\\.)?linkedin\\.com/in/[A-Za-z0-9_-]+/?"
+            title="Ingresa una URL de perfil de LinkedIn válida, p.ej. https://www.linkedin.com/in/usuario/"
             className="w-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
           />
         </div>
 
+        {/* Resto campos */}
         <div>
           <label
             htmlFor="language"
